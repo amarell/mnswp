@@ -1,5 +1,7 @@
 package main
 
+
 func main() {
-	testBogo()
+	d := initGame()
+	d.run()
 }
