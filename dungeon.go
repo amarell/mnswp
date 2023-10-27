@@ -62,6 +62,7 @@ func (d *Dungeon) run() {
 		fmt.Scanln(&command)
 		d.processCommand(command)
 		d.numOfMoves = d.numOfMoves - 1
+		d.moveVamps()
 	}
 
 	fmt.Println("Game over!")
@@ -150,4 +151,10 @@ func (d *Dungeon) overlapExists() (bool, int) {
 	}
 
 	return false, -1
+}
+
+func (d *Dungeon) moveVamps() {
+	for i, vamp := range d.vampires {
+		d.vampires[i] = *vamp.move(d.height)
+	}
 }
