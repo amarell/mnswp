@@ -75,7 +75,7 @@ func (d *Dungeon) printSituation() {
 		fmt.Printf("v: (%d, %d) \n", vamp.x, vamp.y)
 	}
 
-	fmt.Println(strings.Repeat("=", d.height * 3))
+	fmt.Println(strings.Repeat("=", d.height*3))
 	for i := 0; i < d.height; i++ {
 		for j := 0; j < d.width; j++ {
 			if d.player.x == i && d.player.y == j {
@@ -88,7 +88,7 @@ func (d *Dungeon) printSituation() {
 		}
 		fmt.Println()
 	}
-	fmt.Println(strings.Repeat("=", d.height * 3))
+	fmt.Println(strings.Repeat("=", d.height*3))
 }
 
 func (d *Dungeon) isVampireLocatedAtCoords(x, y int) bool {
@@ -101,10 +101,12 @@ func (d *Dungeon) isVampireLocatedAtCoords(x, y int) bool {
 	return false
 }
 
-
 func (d *Dungeon) processCommand(command string) {
-	for i:= 0 ; i< len(command); i++ {
-		d.player.move(string(command[i]))
+	for i := 0; i < len(command); i++ {
+		direction := string(command[i])
+		if d.isValidMove(direction) {
+			d.player.move(direction)
+		}
 		overlapExists, index := d.overlapExists()
 		if overlapExists {
 			d.killVamp(index)
@@ -112,9 +114,32 @@ func (d *Dungeon) processCommand(command string) {
 	}
 }
 
+func (d *Dungeon) isValidMove(direction string) bool {
+	switch direction {
+	case "w":
+		if d.player.x == 0 {
+			return false
+		}
+	case "s":
+		if d.player.x == d.width-1 {
+			return false
+		}
+	case "a":
+		if d.player.y == 0 {
+			return false
+		}
+	case "d":
+		if d.player.y == d.height-1 {
+			return false
+		}
+	}
+
+	return true
+
+}
 
 func (d *Dungeon) killVamp(index int) {
-	d.vampires =  append(d.vampires[:index], d.vampires[index+1:]...)
+	d.vampires = append(d.vampires[:index], d.vampires[index+1:]...)
 }
 
 func (d *Dungeon) overlapExists() (bool, int) {
@@ -126,4 +151,3 @@ func (d *Dungeon) overlapExists() (bool, int) {
 
 	return false, -1
 }
-
