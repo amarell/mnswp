@@ -20,7 +20,7 @@ type Dungeon struct {
 	numOfMoves    int
 }
 
-func initGame() Dungeon {
+func initGame() {
 	var username string
 	fmt.Println("Enter your username: ")
 	fmt.Scanln(&username)
@@ -28,8 +28,7 @@ func initGame() Dungeon {
 
 	d := createDungeon(10, 10, 3, player, 10)
 	d.generateVampires()
-
-	return d
+	d.run()
 }
 
 func createDungeon(width int, height int, numOfVampires int, player Player, numOfMoves int) Dungeon {
