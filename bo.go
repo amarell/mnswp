@@ -28,9 +28,7 @@ func shuffle(arr []int) []int {
 	n := len(arr)
 	for i := 0; i < n-2; i++ {
 		j := rand.Intn(n-i) + i
-		tmp := arr[i]
-		arr[i] = arr[j]
-		arr[j] = tmp
+		arr[i], arr[j] = arr[j], arr[i]
 	}
 
 	return arr
