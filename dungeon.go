@@ -69,15 +69,15 @@ func (d *Dungeon) run() {
 
 func (d *Dungeon) printSituation() {
 	fmt.Printf("There are %d vampires left and you have %d moves\n", len(d.vampires), d.numOfMoves)
-	fmt.Printf("%s (%d, %d) \n", d.player.name, d.player.x, d.player.y)
+	fmt.Print(d.player)
 
 	for _, vamp := range d.vampires {
-		fmt.Printf("v: (%d, %d) \n", vamp.x, vamp.y)
+		fmt.Print(vamp)
 	}
 
 	fmt.Println(strings.Repeat("=", d.height*3))
-	for i := 0; i < d.height; i++ {
-		for j := 0; j < d.width; j++ {
+	for i := 0; i < d.width; i++ {
+		for j := 0; j < d.height; j++ {
 			if d.player.x == i && d.player.y == j {
 				fmt.Printf("[@]")
 			} else if d.isVampireLocatedAtCoords(i, j) {

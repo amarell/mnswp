@@ -57,3 +57,8 @@ func (v *Vampire) isValidVampMove(direction string, upperBound int) bool {
 
 	return true
 }
+
+
+func (v Vampire) String() string {
+	return fmt.Sprintf("v: (%d, %d) \n", v.x, v.y)
+}

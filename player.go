@@ -30,3 +30,7 @@ func (p *Player) move(direction string) {
 		fmt.Println("Invalid direction")
 	}
 }
+
+func (p Player) String() string {
+	return fmt.Sprintf("%s (%d, %d) \n", p.name, p.x, p.y)
+}
