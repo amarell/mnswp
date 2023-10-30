@@ -138,26 +138,20 @@ func (d *Dungeon) processCommand(command string) {
 }
 
 func (d *Dungeon) isValidMove(direction string) bool {
+	newX, newY := d.player.x, d.player.y
+
 	switch direction {
 	case "w":
-		if d.player.x == 0 {
-			return false
-		}
+		newX--
 	case "s":
-		if d.player.x == d.width-1 {
-			return false
-		}
+		newX++
 	case "a":
-		if d.player.y == 0 {
-			return false
-		}
+		newY--
 	case "d":
-		if d.player.y == d.height-1 {
-			return false
-		}
+		newY++
 	}
 
-	return true
+	return newX >= 0 && newX < d.width && newY >= 0 && newY < d.height
 }
 
 func (d *Dungeon) killVamp(index int) {

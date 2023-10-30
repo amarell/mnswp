@@ -13,21 +13,21 @@ type Vampire struct {
 var moves = []string{"w", "a", "s", "d"}
 
 func (v *Vampire) move(upperBound int) *Vampire {
-	randomMove := moves[rand.Intn(len(moves))]
+	direction := moves[rand.Intn(len(moves))]
 
-	for !v.isValidVampMove(randomMove, upperBound) {
-		randomMove = moves[rand.Intn(len(moves))]
+	for !v.isValidVampMove(direction, upperBound) {
+		direction = moves[rand.Intn(len(moves))]
 	}
 
-	switch randomMove {
+	switch direction {
 	case "w":
-		v.x = v.x - 1
+		v.x--
 	case "a":
-		v.y = v.y - 1
+		v.y--
 	case "s":
-		v.x = v.x + 1
+		v.x++
 	case "d":
-		v.y = v.y + 1
+		v.y++
 	default:
 		fmt.Println("Something went seriously wrong")
 	}
@@ -36,26 +36,20 @@ func (v *Vampire) move(upperBound int) *Vampire {
 }
 
 func (v *Vampire) isValidVampMove(direction string, upperBound int) bool {
+	newX, newY := v.x, v.y
+
 	switch direction {
 	case "w":
-		if v.x == 0 {
-			return false
-		}
+		newX--
 	case "s":
-		if v.x == upperBound-1 {
-			return false
-		}
+		newX++
 	case "a":
-		if v.y == 0 {
-			return false
-		}
+		newY--
 	case "d":
-		if v.y == upperBound-1 {
-			return false
-		}
+		newY++
 	}
 
-	return true
+	return newX >= 0 && newX < upperBound && newY >= 0 && newY < upperBound
 }
 
 func (v Vampire) String() string {
