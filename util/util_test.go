@@ -1,40 +1,11 @@
-package bogo
+package util
 
 import (
-	"fmt"
-	"math/rand"
 	"reflect"
+	"testing"
 )
 
-func bogo(arr []int) []int {
-	for !is_sorted(arr) {
-		shuffle(arr)
-	}
-
-	return arr
-}
-
-func is_sorted(arr []int) bool {
-	for i := 0; i < len(arr)-1; i++ {
-		if arr[i] > arr[i+1] {
-			return false
-		}
-	}
-
-	return true
-}
-
-func shuffle(arr []int) []int {
-	n := len(arr)
-	for i := 0; i < n-2; i++ {
-		j := rand.Intn(n-i) + i
-		arr[i], arr[j] = arr[j], arr[i]
-	}
-
-	return arr
-}
-
-func TestBogo() {
+func TestBogo(t *testing.T) {
 	sortTests := []struct {
 		input    []int
 		expected []int
@@ -86,16 +57,10 @@ func TestBogo() {
 
 	for _, test := range sortTests {
 
-		actual := bogo(test.input)
+		actual := Bogo(test.input)
 		sorted := reflect.DeepEqual(actual, test.expected)
 		if !sorted {
-			fmt.Printf("test %s failed", test.name)
-			fmt.Println()
-			fmt.Printf("actual %v expected %v", actual, test.expected)
-		} else {
-			fmt.Printf("passed %s", test.name)
-			fmt.Println()
+			t.Fatalf("Array wasn't sorted - actual: %v - expected: %v", actual, test.expected)
 		}
-
 	}
 }

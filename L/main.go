@@ -1,6 +1,8 @@
 package main
 
-import "amarell/dungeon"
+import (
+	"l/dungeon"
+)
 
 func main() {
 	dungeon.InitGame()

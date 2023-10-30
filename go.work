@@ -1,9 +1,0 @@
-go 1.21.3
-
-use (
-	./greetings
-	./hello
-	./bogo
-	./brr
-	./dungeon
-)
