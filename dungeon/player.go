@@ -19,13 +19,13 @@ func createPlayer(name string) Player {
 func (p *Player) move(direction string) {
 	switch direction {
 	case "w":
-		p.x = p.x - 1
+		p.x--
 	case "a":
-		p.y = p.y - 1
+		p.y--
 	case "s":
-		p.x = p.x + 1
+		p.x++
 	case "d":
-		p.y = p.y + 1
+		p.y++
 	default:
 		fmt.Println("Invalid direction")
 	}
