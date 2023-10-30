@@ -1,4 +1,4 @@
-package main
+package dungeon
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ type Dungeon struct {
 	numOfMoves    int
 }
 
-func initGame() {
+func InitGame() {
 	var username string
 	fmt.Println("Enter your username: ")
 	fmt.Scanln(&username)

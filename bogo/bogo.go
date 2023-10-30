@@ -1,4 +1,4 @@
-package main
+package bogo
 
 import (
 	"fmt"
@@ -34,7 +34,7 @@ func shuffle(arr []int) []int {
 	return arr
 }
 
-func testBogo() {
+func TestBogo() {
 	sortTests := []struct {
 		input    []int
 		expected []int
