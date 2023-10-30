@@ -51,30 +51,53 @@ func (d *Dungeon) generateVampires() {
 }
 
 func (d *Dungeon) run() {
-	var command string
-	for d.numOfMoves > 0 {
-		if len(d.vampires) == 0 {
-			fmt.Println("Congratulations, you have won!")
-			return
-		}
+	for !d.isGameOver() {
 		d.printSituation()
-		fmt.Scanln(&command)
+		command, err := d.readCommand()
+		if err != nil {
+			fmt.Printf("Invalid input: %v\n", err)
+			continue
+		}
 		d.processCommand(command)
-		d.numOfMoves = d.numOfMoves - 1
+		d.numOfMoves--
 		d.moveVamps()
 	}
 
-	fmt.Println("Game over!")
+	if d.isVictory() {
+		fmt.Println("Congratulations, you have won!")
+	} else {
+		fmt.Println("Game over!")
+	}
+}
+
+func (d *Dungeon) isGameOver() bool {
+	return len(d.vampires) == 0 || d.numOfMoves == 0
+}
+
+func (d *Dungeon) isVictory() bool {
+	return len(d.vampires) == 0
+}
+
+func (d *Dungeon) readCommand() (string, error) {
+	var command string
+	_, err := fmt.Scanln(&command)
+	return command, err
 }
 
 func (d *Dungeon) printSituation() {
 	fmt.Printf("There are %d vampires left and you have %d moves\n", len(d.vampires), d.numOfMoves)
-	fmt.Print(d.player)
+	d.printEntities()
+	d.printMap()
+}
 
+func (d *Dungeon) printEntities() {
+	fmt.Print(d.player)
 	for _, vamp := range d.vampires {
 		fmt.Print(vamp)
 	}
+}
 
+func (d *Dungeon) printMap() {
 	fmt.Println(strings.Repeat("=", d.height*3))
 	for i := 0; i < d.width; i++ {
 		for j := 0; j < d.height; j++ {
@@ -135,7 +158,6 @@ func (d *Dungeon) isValidMove(direction string) bool {
 	}
 
 	return true
-
 }
 
 func (d *Dungeon) killVamp(index int) {
