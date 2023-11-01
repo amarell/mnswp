@@ -165,12 +165,12 @@ func isValidVerb(verb string) bool {
 }
 
 func contains(arr []string, element string) bool {
-    for _, v := range arr {
-        if v == element {
-            return true
-        }
-    }
-    return false
+	for _, v := range arr {
+		if v == element {
+			return true
+		}
+	}
+	return false
 }
 
 func readCommand() (string, error) {
