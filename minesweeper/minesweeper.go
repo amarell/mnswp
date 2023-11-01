@@ -91,15 +91,7 @@ func (mf *MineField) processCommand(command string) error {
 
 	fields := strings.Fields(command)
 
-	if len(fields) < 3 {
-		return fmt.Errorf("Please enter space separated coordinates of a tile")
-	}
-
 	verb, x, y := fields[0], atoi(fields[1]), atoi(fields[2])
-
-	if x < 0 || y < 0 {
-		return fmt.Errorf("Please enter a verb and then space separated coords!")
-	}
 
 	switch verb {
 	case "reveal":
@@ -123,11 +115,6 @@ func atoi(str string) int {
 }
 
 func (mf *MineField) revealTile(x, y int) {
-	if x < 0 || x > mf.width || y < 0 || y > mf.height {
-		fmt.Println("Invalid coords")
-		return
-	}
-
 	tile := &mf.tiles[y*mf.width+x]
 	tile.revealed = true
 
@@ -146,29 +133,30 @@ func (mf *MineField) revealTile(x, y int) {
 }
 
 func (mf *MineField) flagTile(x, y int) {
-	if x < 0 || x > mf.width || y < 0 || y > mf.height {
-		fmt.Println("Invalid coords")
-		return
-	}
-
 	mf.tiles[y*mf.width+x].flagged = true
 	mf.numOfFlags--
 }
 
 func (mf *MineField) unflagTile(x, y int) {
-	if x < 0 || x > mf.width || y < 0 || y > mf.height {
-		fmt.Println("Invalid coords")
-		return
-	}
 	mf.tiles[y*mf.width+x].flagged = false
 	mf.numOfFlags++
 }
 
 func (mf *MineField) validateCommand(command string) error {
-	verb := strings.Fields(command)[0]
+	fields := strings.Fields(command)
+
+	verb, x, y := fields[0], atoi(fields[1]), atoi(fields[2])
 
 	if verb != "reveal" && verb != "flag" && verb != "unflag" {
 		return fmt.Errorf("This is not a valid command")
+	}
+
+	if len(fields) < 3 {
+		return fmt.Errorf("Not enough arguments")
+	}
+
+	if x < 0 || x > mf.width || y < 0 || y > mf.height {
+		return fmt.Errorf("Invalid coords")
 	}
 
 	return nil
