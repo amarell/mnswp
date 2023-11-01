@@ -237,17 +237,16 @@ type Point struct {
 }
 
 func (mf *MineField) getSurroundingTiles(x, y int) []Point {
-	surroundingPoints := []Point{}
-
-	surroundingPoints = append(surroundingPoints, Point{x - 1, y - 1})
-	surroundingPoints = append(surroundingPoints, Point{x - 1, y})
-	surroundingPoints = append(surroundingPoints, Point{x - 1, y + 1})
-	surroundingPoints = append(surroundingPoints, Point{x, y + 1})
-	surroundingPoints = append(surroundingPoints, Point{x + 1, y + 1})
-	surroundingPoints = append(surroundingPoints, Point{x + 1, y})
-	surroundingPoints = append(surroundingPoints, Point{x + 1, y - 1})
-	surroundingPoints = append(surroundingPoints, Point{x, y - 1})
-
+	surroundingPoints := [8]Point{
+		{x - 1, y - 1},
+		{x - 1, y},
+		{x - 1, y + 1},
+		{x, y + 1},
+		{x + 1, y + 1},
+		{x + 1, y},
+		{x + 1, y - 1},
+		{x, y - 1},
+	}
 	filtered := []Point{}
 
 	for _, point := range surroundingPoints {
