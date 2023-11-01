@@ -1,9 +1,7 @@
 package main
 
-import (
-	"l/dungeon"
-)
+import "l/minesweeper"
 
 func main() {
-	dungeon.InitGame()
+	minesweeper.InitGame()
 }

@@ -53,7 +53,7 @@ func (d *Dungeon) generateVampires() {
 func (d *Dungeon) run() {
 	for !d.isGameOver() {
 		d.printSituation()
-		command, err := d.readCommand()
+		command, err := readCommand()
 		if err != nil {
 			fmt.Printf("Invalid input: %v\n", err)
 			continue
@@ -78,7 +78,7 @@ func (d *Dungeon) isVictory() bool {
 	return len(d.vampires) == 0
 }
 
-func (d *Dungeon) readCommand() (string, error) {
+func readCommand() (string, error) {
 	var command string
 	_, err := fmt.Scanln(&command)
 	return command, err
