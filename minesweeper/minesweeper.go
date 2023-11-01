@@ -43,11 +43,7 @@ func InitGame() {
 }
 
 func (mf *MineField) isVictory() bool {
-	if !mf.revealedBomb() {
-		return true
-	}
-
-	return false
+	return !mf.revealedBomb()
 }
 
 func (mf *MineField) isGameOver() bool {
@@ -124,7 +120,7 @@ func (mf *MineField) revealTile(x, y int) {
 		for _, point := range surroundingPoints {
 			tile := mf.tiles[point.y*mf.width+point.x]
 
-			if tile.val == 0 && !tile.revealed {
+			if (tile.val == 0 || tile.val == 1 || tile.val == 2 || tile.val == 3) && !tile.revealed {
 				mf.revealTile(point.x, point.y)
 			}
 		}
@@ -179,9 +175,9 @@ func (mf *MineField) generateTiles() {
 
 	for i := 0; i < len(tiles); i++ {
 		if i < mf.numOfBombs {
-			tiles[i] = NewTile(false, true)
+			tiles[i] = NewTile(true) // bombs
 		} else {
-			tiles[i] = NewTile(false, false)
+			tiles[i] = NewTile(false)
 		}
 	}
 

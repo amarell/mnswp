@@ -11,9 +11,9 @@ type Tile struct {
 	val      int
 }
 
-func NewTile(revealed bool, isBomb bool) Tile {
+func NewTile(isBomb bool) Tile {
 	return Tile{
-		revealed: revealed, isBomb: isBomb,
+		isBomb: isBomb,
 	}
 }
 
