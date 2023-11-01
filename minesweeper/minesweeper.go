@@ -90,11 +90,11 @@ func (mf *MineField) processCommand(command string) error {
 	verb, x, y := fields[0], atoi(fields[1]), atoi(fields[2])
 
 	switch verb {
-	case "reveal":
+	case "reveal", "r":
 		mf.revealTile(x, y)
-	case "flag":
+	case "flag", "f":
 		mf.flagTile(x, y)
-	case "unflag":
+	case "unflag", "u":
 		mf.unflagTile(x, y)
 	default:
 		fmt.Println("Invalid command.")
@@ -143,7 +143,7 @@ func (mf *MineField) validateCommand(command string) error {
 
 	verb, x, y := fields[0], atoi(fields[1]), atoi(fields[2])
 
-	if verb != "reveal" && verb != "flag" && verb != "unflag" {
+	if !isValidVerb(verb) {
 		return fmt.Errorf("This is not a valid command")
 	}
 
@@ -156,6 +156,21 @@ func (mf *MineField) validateCommand(command string) error {
 	}
 
 	return nil
+}
+
+func isValidVerb(verb string) bool {
+	validVerbs := []string{"reveal", "flag", "unflag", "r", "f", "u"}
+
+	return contains(validVerbs, verb)
+}
+
+func contains(arr []string, element string) bool {
+    for _, v := range arr {
+        if v == element {
+            return true
+        }
+    }
+    return false
 }
 
 func readCommand() (string, error) {
