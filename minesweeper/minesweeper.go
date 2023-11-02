@@ -17,7 +17,12 @@ type MineField struct {
 	numOfFlags int
 }
 
+func cleanTerminal() {
+	fmt.Print("\033[H\033[2J") 
+}
+
 func InitGame() {
+	cleanTerminal()
 	mf := createMineField(10, 10, 10)
 	mf.generateTiles()
 	mf.calibrate()
@@ -33,12 +38,16 @@ func InitGame() {
 		if err != nil {
 			fmt.Println(err)
 		}
+
+		cleanTerminal()
 	}
 
 	if mf.isVictory() {
 		fmt.Println("Congratulations! You have cleared the minefield!")
 	} else {
 		fmt.Println("Game over! You lost!")
+		mf.revealAllFields()
+		fmt.Println(mf)
 	}
 }
 
@@ -267,4 +276,10 @@ func (mf *MineField) getSurroundingTiles(x, y int) []Point {
 	}
 
 	return filtered
+}
+
+func (mf *MineField) revealAllFields() {
+	for i:=0; i<len(mf.tiles); i++ {
+		mf.tiles[i].revealed = true;
+	}
 }
