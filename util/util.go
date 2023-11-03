@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"math/rand"
 )
 
@@ -32,3 +33,15 @@ func shuffle(arr []int) []int {
 	return arr
 }
 
+func ArrayContains[T comparable](slice []T, element T) bool {
+	for _, el := range slice {
+		if el == element {
+			return true
+		}
+	}
+	return false
+}
+
+func CleanTerminal() {
+	fmt.Print("\033[H\033[2J")
+}

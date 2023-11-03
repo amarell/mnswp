@@ -3,6 +3,7 @@ package minesweeper
 import (
 	"bufio"
 	"fmt"
+	"l/util"
 	"math/rand"
 	"os"
 	"strconv"
@@ -17,12 +18,8 @@ type MineField struct {
 	numOfFlags int
 }
 
-func cleanTerminal() {
-	fmt.Print("\033[H\033[2J") 
-}
-
 func InitGame() {
-	cleanTerminal()
+	util.CleanTerminal()
 	mf := createMineField(10, 10, 10)
 	mf.generateTiles()
 	mf.calibrate()
@@ -39,7 +36,7 @@ func InitGame() {
 			fmt.Println(err)
 		}
 
-		cleanTerminal()
+		util.CleanTerminal()
 	}
 
 	if mf.isVictory() {
@@ -170,16 +167,7 @@ func (mf *MineField) validateCommand(command string) error {
 func isValidVerb(verb string) bool {
 	validVerbs := []string{"reveal", "flag", "unflag", "r", "f", "u"}
 
-	return contains(validVerbs, verb)
-}
-
-func contains(arr []string, element string) bool {
-	for _, v := range arr {
-		if v == element {
-			return true
-		}
-	}
-	return false
+	return util.ArrayContains(validVerbs, verb)
 }
 
 func readCommand() (string, error) {
@@ -279,7 +267,7 @@ func (mf *MineField) getSurroundingTiles(x, y int) []Point {
 }
 
 func (mf *MineField) revealAllFields() {
-	for i:=0; i<len(mf.tiles); i++ {
-		mf.tiles[i].revealed = true;
+	for i := 0; i < len(mf.tiles); i++ {
+		mf.tiles[i].revealed = true
 	}
 }

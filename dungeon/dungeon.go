@@ -2,6 +2,7 @@ package dungeon
 
 import (
 	"fmt"
+	"l/util"
 	"math/rand"
 	"strings"
 )
@@ -52,6 +53,7 @@ func (d *Dungeon) generateVampires() {
 
 func (d *Dungeon) run() {
 	for !d.isGameOver() {
+		util.CleanTerminal()
 		d.printSituation()
 		command, err := readCommand()
 		if err != nil {
