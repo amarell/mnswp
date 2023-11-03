@@ -129,7 +129,7 @@ func (mf *MineField) revealTile(x, y int) {
 		for _, point := range surroundingPoints {
 			tile := mf.tiles[point.y*mf.width+point.x]
 
-			if (tile.val == 0 || tile.val == 1 || tile.val == 2 || tile.val == 3) && !tile.revealed {
+			if !tile.revealed {
 				mf.revealTile(point.x, point.y)
 			}
 		}
