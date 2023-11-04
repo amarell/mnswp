@@ -43,9 +43,10 @@ func InitGame() {
 		fmt.Println("Congratulations! You have cleared the minefield!")
 	} else {
 		fmt.Println("Game over! You lost!")
-		mf.revealAllFields()
-		fmt.Println(mf)
 	}
+
+	mf.revealAllFields()
+	fmt.Println(mf)
 }
 
 func (mf *MineField) isVictory() bool {
