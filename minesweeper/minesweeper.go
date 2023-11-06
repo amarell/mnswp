@@ -160,7 +160,7 @@ func input() Input {
 				default:
 					return UNKNOWN
 				}
-			} 
+			}
 			return UNKNOWN
 		default:
 			return UNKNOWN
@@ -241,8 +241,6 @@ func (mf *MineField) unflagTile(x, y int) {
 	mf.numOfFlags++
 }
 
-
-
 func createMineField(width, height, numOfBombs int) MineField {
 	return MineField{
 		width: width, height: height, numOfBombs: numOfBombs, numOfFlags: numOfBombs,
@@ -289,7 +287,7 @@ func (mf MineField) String() string {
 
 func (mf *MineField) calibrate() {
 	for i := 0; i < len(mf.tiles); i++ {
-		x, y := i % mf.width, i / mf.width
+		x, y := i%mf.width, i/mf.width
 
 		mf.tiles[y*mf.width+x].val = mf.getNumberOfSurroundingBombs(x, y)
 	}
