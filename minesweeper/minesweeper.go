@@ -121,7 +121,7 @@ func (mf *MineField) getSelectedTile() int {
 
 func input() Input {
 	for {
-		b := make([]byte, 1)
+		b := make([]byte, 3)
 		_, err := os.Stdin.Read(b)
 		if err != nil {
 			fmt.Println(err)
@@ -146,9 +146,26 @@ func input() Input {
 			return UNFLAG
 		case 'r':
 			return REVEAL
+		case 0x1b:
+			if b[1] == '[' {
+				switch b[2] {
+				case 'A':
+					return UP
+				case 'B':
+					return DOWN
+				case 'C':
+					return RIGHT
+				case 'D':
+					return LEFT
+				default:
+					return UNKNOWN
+				}
+			} 
+			return UNKNOWN
 		default:
 			return UNKNOWN
 		}
+
 	}
 }
 
