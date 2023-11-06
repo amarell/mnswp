@@ -18,7 +18,7 @@ var colorMap = map[int]string{
 	1: ColorYellow,
 	2: ColorGreen,
 	3: ColorRed,
-	4: ColorCyan,
+	4: ColorRed,
 	5: ColorRed,
 	6: ColorRed,
 	7: ColorRed,
