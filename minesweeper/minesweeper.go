@@ -32,7 +32,7 @@ type MineField struct {
 
 func InitGame() {
 	util.CleanTerminal()
-	mf := createMineField(10, 10, 10)
+	mf := createMineField(20, 20, 35)
 	mf.generateTiles()
 	mf.calibrate()
 
@@ -120,52 +120,49 @@ func (mf *MineField) getSelectedTile() int {
 }
 
 func input() Input {
-	for {
-		b := make([]byte, 3)
-		_, err := os.Stdin.Read(b)
-		if err != nil {
-			fmt.Println(err)
-			return EXIT
-		}
+	b := make([]byte, 3)
+	_, err := os.Stdin.Read(b)
+	if err != nil {
+		fmt.Println(err)
+		return EXIT
+	}
 
-		switch b[0] {
-		// 0x03 - code for control + C
-		case 0x03, 'q':
-			return EXIT
-		case 'd':
-			return RIGHT
-		case 'w':
-			return UP
-		case 's':
-			return DOWN
-		case 'a':
-			return LEFT
-		case 'f':
-			return FLAG
-		case 'u':
-			return UNFLAG
-		case 'r':
-			return REVEAL
-		case 0x1b:
-			if b[1] == '[' {
-				switch b[2] {
-				case 'A':
-					return UP
-				case 'B':
-					return DOWN
-				case 'C':
-					return RIGHT
-				case 'D':
-					return LEFT
-				default:
-					return UNKNOWN
-				}
+	switch b[0] {
+	// 0x03 - code for control + C
+	case 0x03, 'q':
+		return EXIT
+	case 'd':
+		return RIGHT
+	case 'w':
+		return UP
+	case 's':
+		return DOWN
+	case 'a':
+		return LEFT
+	case 'f':
+		return FLAG
+	case 'u', 'e':
+		return UNFLAG
+	case 'r':
+		return REVEAL
+	case 0x1b:
+		if b[1] == '[' {
+			switch b[2] {
+			case 'A':
+				return UP
+			case 'B':
+				return DOWN
+			case 'C':
+				return RIGHT
+			case 'D':
+				return LEFT
+			default:
+				return UNKNOWN
 			}
-			return UNKNOWN
-		default:
-			return UNKNOWN
 		}
-
+		return UNKNOWN
+	default:
+		return UNKNOWN
 	}
 }
 
@@ -266,16 +263,9 @@ func (mf *MineField) generateTiles() {
 }
 
 func (mf MineField) String() string {
-	res := "   "
-
-	for i := 0; i < mf.width; i++ {
-		res += fmt.Sprintf("|%d|", i)
-	}
-
-	res += "\n\r"
+	res := ""
 
 	for i := 0; i < mf.height; i++ {
-		res += fmt.Sprintf("|%d|", i)
 		for j := 0; j < mf.width; j++ {
 			res += fmt.Sprintf("%v", mf.tiles[i*mf.width+j])
 		}
