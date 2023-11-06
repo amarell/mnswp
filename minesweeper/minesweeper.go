@@ -1,13 +1,25 @@
 package minesweeper
 
 import (
-	"bufio"
 	"fmt"
 	"l/util"
 	"math/rand"
 	"os"
 	"strconv"
-	"strings"
+)
+
+type Input int
+
+const (
+	EXIT    = 0
+	UP      = 1
+	DOWN    = 2
+	LEFT    = 3
+	RIGHT   = 4
+	FLAG    = 5
+	UNFLAG  = 6
+	REVEAL  = 7
+	UNKNOWN = 8
 )
 
 type MineField struct {
@@ -26,27 +38,118 @@ func InitGame() {
 
 	for !mf.isGameOver() {
 		fmt.Print(mf)
-		command, err := readCommand()
-		if err != nil {
-			fmt.Printf("Invalid input: %v\n", err)
-		}
-		err = mf.processCommand(command)
+		input := input()
+		exit := mf.processInput(input)
 
-		if err != nil {
-			fmt.Println(err)
+		if exit {
+			break
 		}
 
 		util.CleanTerminal()
 	}
 
 	if mf.isVictory() {
-		fmt.Println("Congratulations! You have cleared the minefield!")
+		fmt.Println("Congratulations! You have cleared the minefield!\n\r")
 	} else {
-		fmt.Println("Game over! You lost!")
+		fmt.Println("Game over! You lost!\n\r")
 	}
 
 	mf.revealAllFields()
 	fmt.Println(mf)
+}
+
+func (mf *MineField) processInput(input Input) bool {
+
+	selectedTileIndex := mf.getSelectedTile()
+
+	if selectedTileIndex == -1 {
+		fmt.Println("Something went wrong!")
+	}
+
+	x, y := selectedTileIndex%mf.width, selectedTileIndex/mf.width
+
+	switch input {
+	case EXIT:
+		return true
+	case UNKNOWN:
+		// nothing
+	case DOWN, UP, RIGHT, LEFT:
+		mf.move(input)
+	case REVEAL:
+		mf.revealTile(x, y)
+	case FLAG:
+		mf.flagTile(x, y)
+	case UNFLAG:
+		mf.unflagTile(x, y)
+	default:
+		// nothing
+	}
+	return false
+}
+
+func (mf *MineField) move(input Input) {
+	selectedTileIndex := mf.getSelectedTile()
+
+	if selectedTileIndex == -1 {
+		fmt.Println("Something went wrong\n\r")
+		return
+	}
+
+	mf.tiles[selectedTileIndex].selected = false
+
+	switch input {
+	case DOWN:
+		mf.tiles[(selectedTileIndex+mf.width)%len(mf.tiles)].selected = true
+	case RIGHT:
+		mf.tiles[(selectedTileIndex+1)%len(mf.tiles)].selected = true
+	case LEFT:
+		mf.tiles[(len(mf.tiles)+(selectedTileIndex-1))%len(mf.tiles)].selected = true
+	case UP:
+		mf.tiles[(len(mf.tiles)+(selectedTileIndex-mf.width))%len(mf.tiles)].selected = true
+	}
+}
+
+func (mf *MineField) getSelectedTile() int {
+	for index, tile := range mf.tiles {
+		if tile.selected {
+			return index
+		}
+	}
+	// should never reach this
+	return -1
+}
+
+func input() Input {
+	for {
+		b := make([]byte, 1)
+		_, err := os.Stdin.Read(b)
+		if err != nil {
+			fmt.Println(err)
+			return EXIT
+		}
+
+		switch b[0] {
+		// 0x03 - code for control + C
+		case 0x03, 'q':
+			return EXIT
+		case 'd':
+			return RIGHT
+		case 'w':
+			return UP
+		case 's':
+			return DOWN
+		case 'a':
+			return LEFT
+		case 'f':
+			return FLAG
+		case 'u':
+			return UNFLAG
+		case 'r':
+			return REVEAL
+		default:
+			return UNKNOWN
+		}
+	}
 }
 
 func (mf *MineField) isVictory() bool {
@@ -85,30 +188,6 @@ func (mf *MineField) revealedBomb() bool {
 	return false
 }
 
-func (mf *MineField) processCommand(command string) error {
-	err := mf.validateCommand(command)
-
-	if err != nil {
-		return err
-	}
-
-	fields := strings.Fields(command)
-
-	verb, x, y := fields[0], atoi(fields[1]), atoi(fields[2])
-
-	switch verb {
-	case "reveal", "r":
-		mf.revealTile(x, y)
-	case "flag", "f":
-		mf.flagTile(x, y)
-	case "unflag", "u":
-		mf.unflagTile(x, y)
-	default:
-		fmt.Println("Invalid command.")
-	}
-	return nil
-}
-
 func atoi(str string) int {
 	num, err := strconv.Atoi(str)
 	if err != nil {
@@ -145,37 +224,7 @@ func (mf *MineField) unflagTile(x, y int) {
 	mf.numOfFlags++
 }
 
-func (mf *MineField) validateCommand(command string) error {
-	fields := strings.Fields(command)
 
-	verb, x, y := fields[0], atoi(fields[1]), atoi(fields[2])
-
-	if !isValidVerb(verb) {
-		return fmt.Errorf("This is not a valid command")
-	}
-
-	if len(fields) < 3 {
-		return fmt.Errorf("Not enough arguments")
-	}
-
-	if x < 0 || x > mf.width || y < 0 || y > mf.height {
-		return fmt.Errorf("Invalid coords")
-	}
-
-	return nil
-}
-
-func isValidVerb(verb string) bool {
-	validVerbs := []string{"reveal", "flag", "unflag", "r", "f", "u"}
-
-	return util.ArrayContains(validVerbs, verb)
-}
-
-func readCommand() (string, error) {
-	reader := bufio.NewReader(os.Stdin)
-	command, err := reader.ReadString('\n')
-	return command, err
-}
 
 func createMineField(width, height, numOfBombs int) MineField {
 	return MineField{
@@ -196,6 +245,8 @@ func (mf *MineField) generateTiles() {
 
 	rand.Shuffle(len(tiles), func(i, j int) { tiles[i], tiles[j] = tiles[j], tiles[i] })
 
+	tiles[0].selected = true
+
 	mf.tiles = tiles
 }
 
@@ -206,14 +257,14 @@ func (mf MineField) String() string {
 		res += fmt.Sprintf("|%d|", i)
 	}
 
-	res += "\n"
+	res += "\n\r"
 
 	for i := 0; i < mf.height; i++ {
 		res += fmt.Sprintf("|%d|", i)
 		for j := 0; j < mf.width; j++ {
 			res += fmt.Sprintf("%v", mf.tiles[i*mf.width+j])
 		}
-		res += "\n"
+		res += "\n\r"
 	}
 
 	return res

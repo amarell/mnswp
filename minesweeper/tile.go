@@ -26,11 +26,10 @@ var colorMap = map[int]string{
 }
 
 type Tile struct {
-	// x        int
-	// y        int
 	flagged  bool
 	revealed bool
 	isBomb   bool
+	selected bool
 	val      int
 }
 
@@ -42,14 +41,21 @@ func NewTile(isBomb bool) Tile {
 
 func (t Tile) String() string {
 	if t.revealed && t.isBomb {
-		return coloredString("[*]", ColorRed)
+		return coloredString("[*]", ternary(t.selected, ColorCyan, ColorRed))
 	} else if t.flagged {
-		return coloredString("[!]", ColorPurple)
+		return coloredString("[!]", ternary(t.selected, ColorCyan, ColorPurple))
 	} else if t.revealed {
-		return coloredString(fmt.Sprintf("[%d]", t.val), colorMap[t.val])
+		return coloredString(fmt.Sprintf("[%d]", t.val), ternary(t.selected, ColorCyan, colorMap[t.val]))
 	} else {
-		return fmt.Sprint("[ ]")
+		return coloredString(fmt.Sprint("[ ]"), ternary(t.selected, ColorCyan, ColorReset))
 	}
+}
+
+func ternary(cond bool, val1, val2 string) string {
+	if cond {
+		return val1
+	}
+	return val2
 }
 
 func coloredString(str, color string) string {
