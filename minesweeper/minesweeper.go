@@ -289,8 +289,7 @@ func (mf MineField) String() string {
 
 func (mf *MineField) calibrate() {
 	for i := 0; i < len(mf.tiles); i++ {
-		x := i % mf.width
-		y := i / mf.width
+		x, y := i % mf.width, i / mf.width
 
 		mf.tiles[y*mf.width+x].val = mf.getNumberOfSurroundingBombs(x, y)
 	}
