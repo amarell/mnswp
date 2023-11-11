@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"time"
 )
 
 type Input int
@@ -31,8 +32,9 @@ type MineField struct {
 }
 
 func InitGame() {
+	gameInitTime := time.Now()
 	util.CleanTerminal()
-	mf := createMineField(20, 20, 35)
+	mf := createMineField(20, 20, 40)
 	mf.generateTiles()
 	mf.calibrate()
 
@@ -48,8 +50,10 @@ func InitGame() {
 		util.CleanTerminal()
 	}
 
+	gameEndTime := time.Now()
+
 	if mf.isVictory() {
-		fmt.Println("Congratulations! You have cleared the minefield!\n\r")
+		fmt.Printf("Congratulations! You have cleared the minefield in %v!\n\r", gameEndTime.Sub(gameInitTime).Round(time.Second))
 	} else {
 		fmt.Println("Game over! You lost!\n\r")
 	}
