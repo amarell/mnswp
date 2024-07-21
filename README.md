@@ -8,7 +8,7 @@ In order to start the game you need to have installed Go programming language on
 
 1. clone this repository
 2. go to directory where you cloned it
-3. `cd l && go run .`
+3. `cd cmd && go run .`
 
 ## How to play the game
 
