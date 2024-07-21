@@ -1,4 +1,4 @@
-module l
+module mnswp
 
 go 1.21.3
 

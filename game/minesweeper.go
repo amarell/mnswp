@@ -2,8 +2,8 @@ package minesweeper
 
 import (
 	"fmt"
-	"l/util"
 	"math/rand"
+	"mnswp/util"
 	"os"
 	"strconv"
 	"time"
