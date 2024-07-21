@@ -5,7 +5,7 @@ import (
 )
 
 func TestArrayContainsMethod(t *testing.T) {
-	sortTests := []struct {
+	arrayContainsTests := []struct {
 		array    []int
 		target   int
 		expected bool
@@ -25,7 +25,7 @@ func TestArrayContainsMethod(t *testing.T) {
 		},
 	}
 
-	for _, test := range sortTests {
+	for _, test := range arrayContainsTests {
 		actual := ArrayContains(test.array, test.target)
 		if actual != test.expected {
 			t.Fatalf("Test failed. Expected %v, Actual %v --- Test name: %v", actual, test.expected, test.name)
